@@ -1,0 +1,40 @@
+import os
+import getpass
+import mysql.connector
+
+
+
+class AcessDataBase():
+
+
+
+UserName = ""
+PassWard = ""
+DataBase = ""
+
+def LoginDB(self):
+
+    self.UserName = input("Username: ")
+
+    os.system("cls")
+
+    self.PassWard = getpass.getpass("Passward")
+
+    os.system("cls")
+
+    self.DataBase = input("DataBase:")
+
+    self.ConectDB() 
+
+def ConectDB(self):
+
+    os.system("cls")
+
+    conexao = mysql.connector.connect(user = self.Username, password = self.Passward,
+                                      host = "localhost",   database = self.DataBase )
+
+    os.system("pause")
+
+Sistema = AcessDataBase()
+
+Sistema.LoginDB()

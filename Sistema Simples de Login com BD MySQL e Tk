@@ -1,0 +1,30 @@
+CREATE TABLE `login` (
+`user` VARCHAR( 20 ) NOT NULL ,
+`pass` VARCHAR( 20 ) NOT NULL
+) TYPE = MYISAM ;
+#Importar as cenas que sao precisas
+from Tkinter import *
+import tkSimpleDialog
+import MySQLdb
+import tkMessageBox
+#Criar a Janela e botao de sair
+top = Tk()
+top.minsize(width=15, height=10)
+janela = Frame(top)
+janela.pack()
+botao = Button (janela, text="SAIR", command=janela.quit)
+botao.pack()
+#Ler login e password
+username = tkSimpleDialog.askstring ("LOGIN" , "Introduza o UserName:")
+password = tkSimpleDialog.askstring ("LOGIN", "Introduza a Password:", show="*")
+#Ligar a bd remota
+db = MySQLdb.connect(host="SQL06.FreeMySQL.net",user="dpintas", passwd="wazaaaaa", db="python")
+cursor = db.cursor()
+cursor.execute("SELECT * FROM login")
+result = cursor.fetchall()
+#Verificar se dados sao validos
+for record in result:
+if username == record[0]:
+	if password == record[1]:
+		tkMessageBox.showinfo ("LOGIN" , "Login correcto")
+janela.mainloop()

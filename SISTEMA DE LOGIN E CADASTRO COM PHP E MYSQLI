@@ -1,0 +1,105 @@
+<?php include_once('settings/includes.php');?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+    <title>Sistema de Login</title>
+  </head>
+  <body>
+    
+  <div class="row">
+    <div class="col-md-5 offset-md-4"><br>
+      <?php
+          $dir = 'pags/';
+          $ext = '.php';
+
+          if($_GET['pagina']){
+            $pagina = ($_GET['pagina']);
+          }else{
+            $pagina = 'login';
+          }
+
+          if(file_exists($dir.$pagina.$ext)){
+            include($dir.$pagina.$ext);
+          }else{
+            echo "<br><div class='alert alert-danger'> Página não encontrada </div>";
+          }
+      ?>
+    </div>
+  </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
+ 
+
+settings/dbconnect.php
+
+<?php
+	$host = 'localhost';
+	$usuario = 'root';
+	$senha = 'wsbws8g5';
+	$banco = 'login';
+
+	$con = new mysqli($host, $usuario, $senha, $banco);
+?>
+<?php
+
+	function cadastro($con){
+		if($_POST && $_POST['env'] == 'envCad'){
+			if($_POST['nome'] && $_POST['usuario'] && $_POST['senha'] && $_POST['email']){
+				$nome = $_POST['nome'];
+				$usuario = $_POST['usuario'];
+				$senha = md5($_POST['senha']);
+				$email = $_POST['email'];
+
+				$query = "INSERT INTO usuarios (nome, usuario, senha, email) VALUES ('$nome','$usuario','$senha','$email')";
+
+				if($con->query($query)){
+					echo "<br><div class='alert alert-success'> Cadastro efetuado com sucesso! </div>";
+				}else{
+					echo "<br><div class='alert alert-danger'> Erro ao cadastrar-se </div>";
+				}
+
+			}else{
+				echo "<br><div class='alert alert-danger'> Preencha todos os campos </div>";
+			}
+
+		}
+	}
+?>
+<?php
+	include_once('dbconnect.php');
+	include_once('functions.php');
+?>
+<h4>Cadastre-se</h4>
+<hr>
+
+<form method="POST">
+		<label>Nome</label>
+		<input type="text" name="nome" class="form-control"/><br>
+
+		<label>Usuário</label>
+		<input type="text" name="usuario" class="form-control"/><br>
+
+		<label>Senha</label>
+		<input type="password" name="senha" class="form-control"/><br>
+
+		<label>Email</label>
+		<input type="email" name="email" class="form-control"/><br>
+
+		<input type="submit" value="Cadastrar" class="btn btn-primary btn-lg btn-block">
+		<input type="hidden" name="env" value="envCad">
+</form>
+
+<?php cadastro($con);?>
